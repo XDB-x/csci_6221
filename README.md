@@ -6,4 +6,5 @@ Chat application.
 
 Group Members: Dongbo Xie, Liyao Cai, Rachel Gonzalez Rodriguez, 
 
+Please use the different branch to develop your task.
 
