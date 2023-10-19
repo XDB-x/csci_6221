@@ -36,6 +36,9 @@ jobs:
 
   build_crystal:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend  # Adjusted working-directory
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
