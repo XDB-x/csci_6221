@@ -6,6 +6,6 @@ dependencies:
     github: kemalcr/kemal
     version: 0.26.0
 
-  websocket:
-    github: kostya/websocket
-    version: 0.1.12
+websocket:
+    github: HCLarsen/crystal-websocket
+    version: 0.1.0
