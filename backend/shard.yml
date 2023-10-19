@@ -1,0 +1,11 @@
+name: web_chat
+version: 0.1.0
+
+dependencies:
+  kemal:
+    github: kemalcr/kemal
+    version: 0.26.0
+
+  websocket:
+    github: kostya/websocket
+    version: 0.1.12
