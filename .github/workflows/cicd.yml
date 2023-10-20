@@ -11,6 +11,9 @@ on:
 jobs:
   build_vue:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend  # Adjusted working-directory
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -20,6 +23,11 @@ jobs:
         with:
           node-version: '14'
       
+      - name: Clear node_modules and package-lock.json
+        run: |
+          rm -rf node_modules
+          rm package-lock.json
+      
       - name: Install dependencies
         run: npm install
       
@@ -28,13 +36,19 @@ jobs:
 
   build_crystal:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: backend  # Adjusted working-directory
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: Set up Crystal
+      - name: Set up Crystal repository
         run: |
-          sudo apt-get -y install crystal
+          curl -fsSL https://dist.crystal-lang.org/apt/setup.sh | sudo bash
+      
+      - name: Install Crystal
+        run: sudo apt-get install -y crystal
       
       - name: Install dependencies
         run: shards install
@@ -42,4 +56,4 @@ jobs:
       - name: Build and Test
         run: crystal spec
 
-
+# Define your deployment steps below
