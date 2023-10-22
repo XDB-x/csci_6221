@@ -9,3 +9,6 @@ dependencies:
 websocket:
     github: HCLarsen/crystal-websocket
     version: 0.1.0
+
+mongo:
+    github: datanoise/mongo.cr
