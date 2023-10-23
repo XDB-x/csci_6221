@@ -14,35 +14,50 @@
   </div>
 </template>
 
-
-
 <script>
+import axios from 'axios';
+
 export default {
   data() {
-  return {
-    firstName: '',
-    lastName: '',
-    email: '',
-    password: '',
-    errors: {}
-  };
-},
-methods: {
-  signup() {
-    this.checkForErrors();
-    if (!Object.keys(this.errors).length) {
-      this.$emit('signup', this.email);
-      this.$router.push('/login');
+    return {
+      firstName: '',
+      lastName: '',
+      email: '',
+      password: '',
+      errors: {}
+    };
+  },
+  methods: {
+    signup() {
+      this.checkForErrors();
+      if (!Object.keys(this.errors).length) {
+        axios.post('http://localhost:3000/signup', {
+          firstName: this.firstName,
+          lastName: this.lastName,
+          email: this.email,
+          password: this.password
+        })
+        .then(response => {
+          if (response.data.status === 'success') {
+            this.$router.push('/login');
+          } else {
+            this.errors.global = response.data.message;
+          }
+        })
+        .catch(error => {
+          console.error("There was an error!", error);
+        });
+      }
+    },
+    checkForErrors() {
+      this.errors = {}; // reset errors
+      if (!this.email) this.errors.email = "Email cannot be empty.";
+      else if (!this.isEmailValid) this.errors.email = "The email format must be correct.";
+      if (!this.password) this.errors.password = "Password cannot be empty.";
+      else if (!this.isPasswordValid) this.errors.password = "Password must be at least 8 characters. Include at least one uppercase letter, one lowercase letter, and number.";
     }
   },
-  checkForErrors() {
-  this.errors = {}; // reset errors
-  if (!this.email) this.errors.email = "Email cannot be empty.";
-  else if (!this.isEmailValid) this.errors.email = "The email format must be correct.";
-  if (!this.password) this.errors.password = "Password cannot be empty.";
-  else if (!this.isPasswordValid) this.errors.password = "Password must be at least 8 characters. Include at least one uppercase letter, one lowercase letter, and number.";
-},
-computed: {
+  computed: {
     isEmailValid() {
       const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
       return emailRegex.test(this.email);
@@ -56,10 +71,7 @@ computed: {
     }
   }
 }
-}
-
 </script>
-
 
 <style>
 .error-text {

@@ -1,19 +1,29 @@
 require "kemal"
 require "json"
 require "mongo"
+require "crypto/bcrypt"
 
 # Initialize MongoDB
-client = Mongo::Client.new("mongodb://localhost:27017", database: "chatdb")
-users = client["users"]
+client = Mongo::Client.new("mongodb://localhost:27017", database: "crystal")
+users = client["UserInfo"]
 
 post "/signup" do |env|
   body = env.request.body.rewind.to_s
   data = JSON.parse(body)
 
-  # Validate data here (similar to your Vue.js checks)
+  # Validate data
+  
+  hashed_password = Crypto::Bcrypt::Password.create(data["password"])
 
   # Save to MongoDB
-  users.insert_one(data.to_h)
+  user_data = {
+    "firstName" => data["firstName"],
+    "lastName"  => data["lastName"],
+    "email"     => data["email"],
+    "password"  => hashed_password.to_s
+  }
+
+  users.insert_one(user_data)
 
   # Send response
   env.response.content_type = "application/json"
@@ -24,10 +34,10 @@ post "/login" do |env|
   body = env.request.body.rewind.to_s
   data = JSON.parse(body)
 
-  # Check in MongoDB
-  user = users.find_one({"username" => data["username"], "password" => data["password"]})
+  # Check in MongoDB for the user based on the email
+  user = users.find_one({"email" => data["email"]})
 
-  if user
+  if user && Crypto::Bcrypt::Password.new(user["password"]) == data["password"]
     env.response.content_type = "application/json"
     {"status": "success"}.to_json
   else

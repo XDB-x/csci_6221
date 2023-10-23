@@ -12,3 +12,6 @@ websocket:
 
 mongo:
     github: datanoise/mongo.cr
+    
+crypto:
+    github: crystal-lang/crystal-crypto

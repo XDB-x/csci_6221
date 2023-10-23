@@ -13,30 +13,43 @@
   </div>
 </template>
 
-
 <script>
+import axios from 'axios';
+
 export default {
   data() {
-  return {
-    username: '',
-    password: '',
-    errors: {}
-  };
-},
-methods: {
-  login() {
-    this.checkForErrors();
-    if (!Object.keys(this.errors).length) {
-      this.$emit('login', this.username);
-    }
+    return {
+      username: '',
+      password: '',
+      errors: {}
+    };
   },
-  checkForErrors() {
-    this.errors = {}; // reset errors
-    if (!this.username) this.errors.username = "Username cannot be empty.";
-    if (!this.password) this.errors.password = "Password cannot be empty.";
+  methods: {
+    login() {
+      this.checkForErrors();
+      if (!Object.keys(this.errors).length) {
+        axios.post('http://localhost:3000/login', {
+          username: this.username,
+          password: this.password
+        })
+        .then(response => {
+          if (response.data.status === 'success') {
+            this.$router.push('/dashboard');
+          } else {
+            this.errors.global = response.data.message;
+          }
+        })
+        .catch(error => {
+          console.error("There was an error!", error);
+        });
+      }
+    },
+    checkForErrors() {
+      this.errors = {}; // reset errors
+      if (!this.username) this.errors.username = "Username cannot be empty.";
+      if (!this.password) this.errors.password = "Password cannot be empty.";
+    }
   }
-}
-
 }
 </script>
 
