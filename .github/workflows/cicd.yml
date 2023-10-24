@@ -32,7 +32,8 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend  # Adjusted working-directory
+        shell: bash -l {0}  # Adjusted shell to be a login shell
+        working-directory: backend
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -41,10 +42,10 @@ jobs:
         run: |
           git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0
           echo '. $HOME/.asdf/asdf.sh' >> ~/.bashrc
-          source ~/.bashrc
       
       - name: Install Crystal using asdf
         run: |
+          source ~/.bashrc
           asdf plugin-add crystal https://github.com/asdf-community/asdf-crystal.git
           asdf install crystal 1.0.0
           asdf global crystal 1.0.0
@@ -54,5 +55,4 @@ jobs:
       
       - name: Build and Test
         run: crystal spec
-
 # Define your deployment steps below
