@@ -26,7 +26,8 @@ Clone the repository to your local machine:
 
 ```bash
 git clone https://github.com/XDB-x/csci_6221.git
-cd your-repository-name
+cd csci_6221 && shards install
+crystal src csci_6221.cr
 ```
 
 ## Running Vue.js Files
