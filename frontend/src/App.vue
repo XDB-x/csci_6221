@@ -1,20 +1,17 @@
 <template>
-  <div id="app" class="app-container">
+  <el-container id="app" class="app-container">
     <router-view @login="login" @signup="signup"/>
     
-    <div v-if="userLoggedIn" class="chat-interface">
-      <div class="chat-list">
-        <!-- You should implement a ChatList component here. -->
-      </div>
+    <el-main v-if="userLoggedIn" class="chat-interface">
+      <el-aside width="30%" class="chat-list">
 
-      <!-- A Chat component could be placed here. -->
-    </div>
-
-    <div v-if="userLoggedIn">
-      <p>Welcome {{ username }}!</p>
-      <button @click="logout">Logout</button>
-    </div>
-  </div>
+      </el-aside>
+      <el-container direction="vertical">
+        <p>Welcome {{ username }}!</p>
+        <el-button @click="logout">Logout</el-button>
+      </el-container>
+    </el-main>
+  </el-container>
 </template>
 
 <script>
@@ -31,17 +28,17 @@ export default {
       this.username = username;
     },
     signup(username) {
-      // You might adapt this method to handle additional user details from your modified SignupForm.vue
+
       this.userLoggedIn = true;
       this.username = username;
     },
     logout() {
       this.userLoggedIn = false;
       this.username = '';
-      this.$router.push('/login'); // Redirect to login page after logging out.
-    }
+      this.$router.push('/login'); // redirect to login page
   }
-}
+},
+};
 </script>
 
 <style>
@@ -64,4 +61,27 @@ export default {
   border-right: 1px solid #ccc;
   overflow-y: auto;
 }
+
+.app-container {
+  height: 100vh;
+}
+
+.chat-interface {
+  height: 100%;
+}
+
+.chat-list {
+  border-right: 1px solid #ccc;
+  overflow-y: auto;
+}
+
+.auth-form {
+  width: 300px; /* Or any desired width */
+  margin: 0 auto;
+}
+
+.submit-btn {
+  width: 100%;
+}
+
 </style>
