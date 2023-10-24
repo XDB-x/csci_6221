@@ -4,9 +4,13 @@ version: 0.1.0
 dependencies:
   pg:
     github: will/crystal-pg
+    version: 0.27.0
   crypto:
     github: crystal-lang/crystal
+    version: 0.24.1
   kemal:
     github: kemalcr/kemal
+    version: 1.4.0
+
   
 
