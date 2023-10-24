@@ -53,3 +53,7 @@ Branches: It's recommended to create separate branches for different features or
 Pull Requests: Submit pull requests for code review before merging into the main branch.
 Issues: Use GitHub issues to track bugs, feature requests, and other types of issues.
 Actions: Utilize GitHub Actions for continuous integration and other automation.
+
+## Database
+
+For data base we use Postgresql. For details see the backend file server.cr
