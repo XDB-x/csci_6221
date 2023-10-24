@@ -22,3 +22,6 @@ shards:
   kemal:
     git: https://github.com/kemalcr/kemal.git
     version: 1.4.0
+  crypt:
+    git: https://github.com/nicolab/crystal-crypt.git
+    version: 1.0.0

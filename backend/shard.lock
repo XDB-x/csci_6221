@@ -4,10 +4,6 @@ shards:
     git: https://github.com/sija/backtracer.cr.git
     version: 1.2.2
 
-  crypto:
-    git: https://github.com/crystal-lang/crystal.git
-    version: 0.24.1
-
   db:
     git: https://github.com/crystal-lang/crystal-db.git
     version: 0.12.0
