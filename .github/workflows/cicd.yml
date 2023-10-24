@@ -37,12 +37,17 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: Set up Crystal repository
+      - name: Install asdf
         run: |
-          curl -fsSL https://dist.crystal-lang.org/apt/setup.sh | sudo bash
+          git clone https://github.com/asdf-vm/asdf.git ~/.asdf --branch v0.8.0
+          echo '. $HOME/.asdf/asdf.sh' >> ~/.bashrc
+          source ~/.bashrc
       
-      - name: Install Crystal
-        run: sudo apt-get install -y crystal=1.0.0-1
+      - name: Install Crystal using asdf
+        run: |
+          asdf plugin-add crystal https://github.com/asdf-community/asdf-crystal.git
+          asdf install crystal 1.0.0
+          asdf global crystal 1.0.0
       
       - name: Install dependencies
         run: shards install
