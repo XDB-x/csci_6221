@@ -42,7 +42,7 @@ jobs:
           curl -fsSL https://dist.crystal-lang.org/apt/setup.sh | sudo bash
       
       - name: Install Crystal
-        run: sudo apt-get install -y crystal
+        run: sudo apt-get install -y crystal=1.0.0-1
       
       - name: Install dependencies
         run: shards install
