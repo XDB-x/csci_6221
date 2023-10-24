@@ -13,7 +13,7 @@ describe "Macros" do
     it "adds a custom handler" do
       add_handler CustomTestHandler.new
       Kemal.config.setup
-      Kemal.config.handlers.size.should eq 7
+      Kemal.config.handlers.size.should eq 8
     end
   end
 
@@ -63,6 +63,24 @@ describe "Macros" do
     end
   end
 
+  describe "#callbacks" do
+    it "can break block with halt macro from before_* callback" do
+      filter_middleware = Kemal::FilterHandler.new
+      filter_middleware._add_route_filter("GET", "/", :before) do |env|
+        halt env, status_code: 400, response: "Missing origin."
+      end
+
+      get "/" do |_env|
+        "Hello world"
+      end
+
+      request = HTTP::Request.new("GET", "/")
+      client_response = call_request_on_app(request)
+      client_response.status_code.should eq(400)
+      client_response.body.should eq("Missing origin.")
+    end
+  end
+
   describe "#headers" do
     it "can add headers" do
       get "/headers" do |env|
@@ -82,7 +100,7 @@ describe "Macros" do
   describe "#send_file" do
     it "sends file with given path and default mime-type" do
       get "/" do |env|
-        send_file env, "./spec/asset/hello.ecr"
+        send_file env, "#{__DIR__}/asset/hello.ecr"
       end
 
       request = HTTP::Request.new("GET", "/")
@@ -94,7 +112,7 @@ describe "Macros" do
 
     it "sends file with given path and given mime-type" do
       get "/" do |env|
-        send_file env, "./spec/asset/hello.ecr", "image/jpeg"
+        send_file env, "#{__DIR__}/asset/hello.ecr", "image/jpeg"
       end
 
       request = HTTP::Request.new("GET", "/")
@@ -118,7 +136,7 @@ describe "Macros" do
 
     it "sends file with given path and given filename" do
       get "/" do |env|
-        send_file env, "./spec/asset/hello.ecr", filename: "image.jpg"
+        send_file env, "#{__DIR__}/asset/hello.ecr", filename: "image.jpg"
       end
 
       request = HTTP::Request.new("GET", "/")
@@ -132,7 +150,7 @@ describe "Macros" do
     it "adds HTTP::CompressHandler to handlers" do
       gzip true
       Kemal.config.setup
-      Kemal.config.handlers[4].should be_a(HTTP::CompressHandler)
+      Kemal.config.handlers[5].should be_a(HTTP::CompressHandler)
     end
   end
 

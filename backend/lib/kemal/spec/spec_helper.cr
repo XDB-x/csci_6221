@@ -4,8 +4,8 @@ require "../src/*"
 include Kemal
 
 class CustomLogHandler < Kemal::BaseLogHandler
-  def call(env)
-    call_next env
+  def call(context)
+    call_next(context)
   end
 
   def write(message)
@@ -48,6 +48,9 @@ def create_ws_request_and_return_io_and_context(handler, request)
   rescue IO::Error
     # Raises because the IO::Memory is empty
   end
+  {% if compare_versions(Crystal::VERSION, "0.35.0-0") >= 0 %}
+    response.upgrade_handler.try &.call(io)
+  {% end %}
   io.rewind
   {io, context}
 end
@@ -82,6 +85,7 @@ end
 
 Spec.after_each do
   Kemal.config.clear
+  Kemal::FilterHandler::INSTANCE.tree = Radix::Tree(Array(Kemal::FilterHandler::FilterBlock)).new
   Kemal::RouteHandler::INSTANCE.routes = Radix::Tree(Route).new
   Kemal::RouteHandler::INSTANCE.cached_routes = Hash(String, Radix::Result(Route)).new
   Kemal::WebSocketHandler::INSTANCE.routes = Radix::Tree(WebSocket).new

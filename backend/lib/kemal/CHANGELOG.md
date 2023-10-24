@@ -1,3 +1,66 @@
+# 1.4.0 (15-04-2023)
+
+- Crystal 1.8.0 support :tada:
+- Fix multiple logger handlers when custom logger is used [#653](https://github.com/kemalcr/kemal/pull/653). Thanks @aravindavk :pray:
+- Add Kemal::OverrideMethodHandler [#651](https://github.com/kemalcr/kemal/pull/651). Thanks @sdogruyol :pray:
+- HeadRequestHandler: run GET handler and don't return the body [#655](https://github.com/kemalcr/kemal/pull/655). Thanks @compumike :pray:
+
+# 1.3.0 (09-10-2022)
+- Crystal 1.6.0 support :tada:
+- Disable signal trap for usage Kemal with other tools [#642](https://github.com/kemalcr/kemal/pull/642). Thanks @le0pard :pray:
+- Bump exception_page shard to v0.3.0 [#645](https://github.com/kemalcr/kemal/pull/645). Thanks @Sija :pray:
+- ***(Security)*** Omitting filters fix for lowercase methods requests [#647](https://github.com/kemalcr/kemal/pull/647). Thanks @sdogruyol @SlayerShadow :pray:
+
+# 1.2.0 (07-07-2022)
+
+- Crystal 1.5.0 support :tada:
+- Eliminated several seconds of delay when loading big mp4 file. Thanks @Athlon64 :pray:
+- Fix content_for failing to capture the correct block input [#639](https://github.com/kemalcr/kemal/pull/639). Thanks @sdogruyol :pray:
+- Closes response by default in HTTP::Server::Context#redirect [#641](https://github.com/kemalcr/kemal/pull/641). Thanks @cyangle :pray:
+- Enable option for index.html to be a directories default [#640](https://github.com/kemalcr/kemal/pull/640). Thanks @ukd1 :pray:
+
+You can enable it via 
+
+```crystal
+  serve_static({"dir_index" => true})
+```
+
+# 1.1.2 (24-02-2022)
+
+- Fix content rendering [#631](https://github.com/kemalcr/kemal/pull/631). Thanks @matthewmcgarvey :pray:
+
+# 1.1.1 (22-02-2022)
+
+- Ignore HTTP::Server::Response patching for crystal >= 1.3.0 [#628](https://github.com/kemalcr/kemal/pull/628). Thanks @SamantazFox :pray:
+# 1.1.0 (02-09-2021)
+
+- You can now set your own application name for startup message [#606](https://github.com/kemalcr/kemal/pull/606). Thanks @aravindavk :pray:
+- Add array of paths support for before/after filters [#605](https://github.com/kemalcr/kemal/pull/605). Thanks @sdogruyol :pray:
+- Fixed executing filters when before and after is defined at the same time [#612](https://github.com/kemalcr/kemal/pull/612). Thanks @mamantoha :pray:
+-  Set content type to text/html for 500 exceptions [#616](https://github.com/kemalcr/kemal/pull/616). Thanks @sdogruyol :pray:
+
+# 1.0.0 (22-03-2021)
+
+- Crystal 1.0.0 support :tada:
+- Update Radix to use latest 0.4.0 [#596](https://github.com/kemalcr/kemal/pull/596). Thanks @luislavena :pray:
+- Use latest version of Ameba dependency (dev) [#597](https://github.com/kemalcr/kemal/pull/597). Thanks @luislavena :pray:
+- Fix StaticFileHandler failing spec [#599](https://github.com/kemalcr/kemal/pull/599). Thanks @jinn999 :pray:
+
+# 0.27.0 (28-11-2020)
+
+- Crystal 0.35.x support :tada: Thanks @bcardiff :pray:
+- Fix issues with responding with long strings [#576](https://github.com/kemalcr/kemal/pull/576). Thanks @mamantoha :pray:
+- Fix broken WebSocket support in 0.35.0 [#577](https://github.com/kemalcr/kemal/pull/577). Thanks @mamantoha :pray:
+- Allow to set optional response body on redirects [#561](https://github.com/kemalcr/kemal/pull/561). Thanks @mamantoha :pray:
+
+# 0.26.1 (01-12-2019)
+
+- Fix process request when a response already closed [#550](https://github.com/kemalcr/kemal/pull/550). Thanks @mamantoha :pray:
+- Switch to new Ameba repository [#549](https://github.com/kemalcr/kemal/pull/549). Thanks @mamantoha :pray:
+- Check for `KEMAL_ENV` variable already in `Config#initialize`[#552](https://github.com/kemalcr/kemal/pull/552). Thanks @Sija :pray:
+- Cleanup Ameba warnings [#551](https://github.com/kemalcr/kemal/pull/551). Thanks @Sija :pray:
+- Flush io buffer after each write to log [#554](https://github.com/kemalcr/kemal/pull/554). Thanks @mang :pray:
+
 # 0.26.0 (05-08-2019)
 
 - Crystal 0.30.0 support :tada: [#548](https://github.com/kemalcr/kemal/pull/548) and [#544](https://github.com/kemalcr/kemal/pull/544). Thanks @bcardiff and @straight-shoota :pray:

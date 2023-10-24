@@ -1,4 +1,4 @@
-# Exception Page
+# Exception Page [![CI](https://github.com/crystal-loot/exception_page/actions/workflows/ci.yml/badge.svg)](https://github.com/crystal-loot/exception_page/actions/workflows/ci.yml)
 
 A library for displaying exceptional exception pages for easier debugging.
 
@@ -104,6 +104,7 @@ TODO: Write development instructions here
 
 - [@paulcsmith](https://github.com/paulcsmith) Paul Smith
 - [@faustinoaq](https://github.com/faustinoaq) Faustino Aigular - Wrote the initial [Amber PR adding exception pages](https://github.com/amberframework/amber/pull/864)
+- [@Sija](https://github.com/paulcsmith) Sijawusz Pur Rahnama
 
 ## Special Thanks
 

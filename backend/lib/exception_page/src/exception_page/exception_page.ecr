@@ -11,16 +11,12 @@
   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   See the License for the specific language governing permissions and
   limitations under the License. -->
-<%-
-monospace_font = "menlo, consolas, monospace"
--%>
+<% monospace_font = "menlo, consolas, monospace" %>
 <!DOCTYPE html>
 <html>
 <head>
-    <%
-        details = @message.lines
-        headline = details.first? || "Error"
-    %>
+    <% details = @message.lines %>
+    <% headline = details.first? || "Error" %>
     <meta charset="utf-8">
     <title><%= @title %> at <%= @method %> <%= @path %> - <%= headline %></title>
     <meta name="viewport" content="width=device-width">
@@ -43,13 +39,13 @@ monospace_font = "menlo, consolas, monospace"
 
     @media (max-width: 768px) {
         html {
-             font-size: 14px;
+            font-size: 14px;
         }
     }
 
     @media (max-width: 480px) {
         html {
-             font-size: 13px;
+            font-size: 13px;
         }
     }
 
@@ -94,8 +90,8 @@ monospace_font = "menlo, consolas, monospace"
     }
 
     /*
-     * Exception logo
-     */
+    * Exception logo
+    */
 
     .exception-logo {
         position: absolute;
@@ -109,22 +105,19 @@ monospace_font = "menlo, consolas, monospace"
         display: block;
         height: 64px;
         width: 100%;
-        background-size: auto 100%;
+        background-size: 100%;
         <%- if styles.logo_uri -%>
         background-image: url("<%= styles.logo_uri %>");
         <%- end -%>
-        background-position: right 0;
+        background-position: center center;
         background-repeat: no-repeat;
     }
 
     @media (max-width: 768px) {
         .exception-logo {
-            position: static;
-        }
-
-        .exception-logo:before {
-            height: 32px;
-            background-position: left 0;
+            right: 32px;
+            top: 6px;
+            width: 48px;
         }
     }
 
@@ -135,8 +128,8 @@ monospace_font = "menlo, consolas, monospace"
     }
 
     /*
-     * Exception info
-     */
+    * Exception info
+    */
 
     /* Compensate for logo placement */
     @media (min-width: 769px) {
@@ -175,11 +168,20 @@ monospace_font = "menlo, consolas, monospace"
         .exception-info > .title {
             font-size: <%= 1.15 **  4 %>em;
         }
+
+        /* Compensate for logo placement */
+        .exception-info > .struct {
+            margin-right: 48px;
+        }
     }
 
     @media (max-width: 480px) {
         .exception-info > .title {
             font-size: <%= 1.1 ** 4 %>em;
+        }
+
+        .exception-info > .struct {
+            margin-right: 0;
         }
     }
 
@@ -189,11 +191,13 @@ monospace_font = "menlo, consolas, monospace"
     }
 
     /*
-     * Code explorer
-     */
+    * Code explorer
+    */
 
     .code-explorer {
-      margin: 32px 0 0 0;
+        margin: 32px 0 0 0;
+        position: relative;
+        min-height: 249px;
     }
 
     @media (max-width: 768px) {
@@ -210,8 +214,10 @@ monospace_font = "menlo, consolas, monospace"
     }
 
     .code-explorer > .code-snippets {
-        float: left;
-        width: 45%;
+        width: 55%;
+        margin-left: 45%;
+        padding-left: 32px;
+        padding-top: 8px;
     }
 
     .code-explorer > .stack-trace {
@@ -236,18 +242,22 @@ monospace_font = "menlo, consolas, monospace"
     }
 
     /*
-     * Snippets
-     */
+    * Snippets
+    */
 
     .code-snippets {
     }
 
     /*
-     * Frame info:
-     * Holds the code (code-block) and more
-     */
+    * Frame info:
+    * Holds the code (code-block) and more
+    */
 
     .frame-info {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 45%;
         background: white;
         box-shadow:
             0 1px 3px rgba(80, 100, 140, .1),
@@ -259,6 +269,12 @@ monospace_font = "menlo, consolas, monospace"
         padding: 12px 16px;
         white-space: no-wrap;
         font-size: <%= 1.2 ** -1 %>em;
+    }
+
+    @media (max-width: 768px) {
+      .frame-info {
+        position: static;
+      }
     }
 
     @media (max-width: 480px) {
@@ -298,8 +314,8 @@ monospace_font = "menlo, consolas, monospace"
     }
 
     /*
-     * Frame details
-     */
+    * Frame details
+    */
 
     .frame-summary.-short {
         color: #a0a0a0;
@@ -316,9 +332,9 @@ monospace_font = "menlo, consolas, monospace"
     }
 
     /*
-     * Code block:
-     * The `pre` that holds the code
-     */
+    * Code block:
+    * The `pre` that holds the code
+    */
 
     .code-block {
         margin: 0;
@@ -369,8 +385,8 @@ monospace_font = "menlo, consolas, monospace"
     }
 
     /*
-     * Empty code
-     */
+    * Empty code
+    */
 
     .code-block-empty {
         text-align: center;
@@ -380,14 +396,21 @@ monospace_font = "menlo, consolas, monospace"
     }
 
     /*
-     * Stack trace heading
-     */
+    * Stack trace heading
+    */
 
     .stack-trace-heading {
         padding-top: 8px;
+        padding-left: 8px;
+        font-size: <%= 1.2 ** -1 %>em;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
     }
 
-    .stack-trace-heading:after {
+    .stack-trace-heading:after,
+    .stack-trace-heading-after {
         content: '';
         display: block;
         clear: both;
@@ -401,50 +424,20 @@ monospace_font = "menlo, consolas, monospace"
         display: none;
     }
 
-    .stack-trace-heading > label {
-        display: block;
-        padding-left: 8px;
-        line-height: 1.9;
-        font-size: <%= 1.2 ** -1 %>em;
-        -webkit-user-select: none;
-        -moz-user-select: none;
-        -ms-user-select: none;
-        user-select: none;
-    }
-
-    .stack-trace-heading > label > input {
+    #show-all-frame {
         margin-right: .3em;
     }
 
     @media (max-width: 480px) {
-        .stack-trace-heading > label {
+        .stack-trace-heading {
             font-size: <%= 1.1 ** -1 %>em;
         }
     }
 
     /*
-     * Stack trace
-     */
-
-    .stack-trace-list,
-    .stack-trace-list > li {
-        margin: 0;
-        padding: 0;
-        list-style-type: none;
-    }
-
-    .stack-trace-list > li > .stack-trace-item.-all {
-        display: none;
-    }
-
-    .stack-trace-list.-show-all > li > .stack-trace-item.-all {
-        display: block;
-    }
-
-    /*
-     * Stack trace item:
-     * The clickable line to inspect a stack trace
-     */
+    * Stack trace item:
+    * The clickable line to inspect a stack trace
+    */
 
     .stack-trace-item {
         font-size: <%= 1.2 ** -1 %>em;
@@ -498,6 +491,11 @@ monospace_font = "menlo, consolas, monospace"
         display: none;
     }
 
+    .stack-trace-item.-unknown > .left {
+        float: left;
+        max-width: 100%;
+    }
+
     .stack-trace-item > .left {
         float: left;
         max-width: 55%;
@@ -531,9 +529,9 @@ monospace_font = "menlo, consolas, monospace"
     }
 
     /*
-     * Code as a blockquote:
-     * Like `pre` but with wrapping
-     */
+    * Code as a blockquote:
+    * Like `pre` but with wrapping
+    */
 
     .code-quote {
         font-family: <%= monospace_font %>;
@@ -550,16 +548,16 @@ monospace_font = "menlo, consolas, monospace"
     }
 
     /*
-     * Conn info
-     */
+    * Conn info
+    */
 
     .conn-info {
         border-top: solid 1px #eee;
     }
 
     /*
-     * Conn details
-     */
+    * Conn details
+    */
 
     .conn-details {
     }
@@ -609,6 +607,59 @@ monospace_font = "menlo, consolas, monospace"
             font-size: <%= 1.1 ** -1 %>em;
         }
     }
+
+    @media screen and (max-width: 768px) {
+        .code-explorer > .code-snippets {
+            margin-left: 0;
+            padding-left: 0;
+        }
+
+        .frame-info {
+            width: 100%;
+            top: -300px;
+        }
+    }
+
+    .code-snippets [type="radio"] {
+        opacity: 0;
+        display:none;
+    }
+
+    .frame-info {
+        display: none;
+    }
+
+    .code-snippets [type="radio"]:checked ~ label ~ .frame-info {
+        display: block;
+    }
+
+    #show-all-frames[type="checkbox"] ~ label ~ div.code-snippets-wrapper > label.stack-trace-item.-all,
+    #show-all-frames[type="checkbox"] ~ label ~ div.code-snippets-wrapper > label.stack-trace-item.-unknown
+    {
+        display: none;
+    }
+
+    #show-all-frames[type="checkbox"]:checked ~ label ~ div.code-snippets-wrapper > label.stack-trace-item.-all,
+    #show-all-frames[type="checkbox"]:checked ~ label ~ div.code-snippets-wrapper > label.stack-trace-item.-unknown
+    {
+        display: block;
+    }
+
+    .frame-info {
+        clear: right;
+    }
+
+    .code-snippets-wrapper label.stack-trace-item.-all{
+        display: none;
+    }
+
+    .code-snippets input[type="checkbox"]:checked .code-snippets-wrapper label.stack-trace-item.-all{
+        display: block;
+    }
+
+    .code-snippets-wrapper input[type="radio"]:checked ~ label{
+        background-color: white;
+    }
     </style>
 </head>
 <body>
@@ -635,68 +686,60 @@ monospace_font = "menlo, consolas, monospace"
                 </pre>
             </details>
         </header>
-        <% if !@frames.empty? %>
+        <% unless @frames.empty? %>
         <div class="code-explorer">
             <div class="code-snippets" flow-id="code-frames">
-                <% @frames.each do |frame| %>
-                  <div class="frame-info" data-index="<%= frame.index %>" role="stack-trace-details">
-                    <div class="file">
-                        <a href="#"><%= frame.file %></a>
-                    </div>
+                <%= stack_trace_heading_html %>
+                <input type="checkbox" role="show-all-toggle" id="show-all-frames" flow-id="show-all-frames">
+                <label class="stack-trace-heading" for="show-all-frames">Show all frames</label>
 
-                    <%- if !frame.snippets.empty? -%>
-                      <pre class="code code-block">
-                        <%- frame.snippets.each do |snippet| -%>
-                          <span class="line <% if snippet.highlight %>-highlight<% end %>"><span class="ln"><%= snippet.line %></span><span class="code"><%= HTML.escape(snippet.code.rstrip).gsub("&#39;", '\'').gsub("&quot;", '"') %></span></span>
-                        <%- end -%>
-                      </pre>
-                    <%- else -%>
-                      <div class="code code-block-empty">No code available.</div>
-                    <%- end -%>
+                <% @frames.each_with_index do |frame, index| %>
+                  <div class="code-snippets-wrapper" flow-id="code-frame-file">
+                    <input type="radio" id="trace<%= index %>" name="stack-trace-list" <%= index == 0 ? "checked" : "" %> >
+                    <label for="trace<%= index %>" class="stack-trace-item -<%= css_class_for_frame(frame) %>">
+                      <%- path = frame.relative_path || frame.path -%>
+                      <span class="left">
+                          <span class="app"><%= label_for_frame(frame) %></span>
+                          <span class="filename">
+                            <%- if path -%>
+                              <%= path %><% if frame.lineno %><span class="line">:<%= frame.lineno %></span><% end %>
+                            <%- else -%>
+                              <%= HTML.escape(frame.method) %>
+                            <%- end -%>
+                          </span>
+                      </span>
 
-                    <% if !frame.args.blank? %>
-                    <details class="meta">
-                        <summary class="frame-summary" flow-id="code-frame-summary">
-                            <span class="app"><%= frame.label %></span>
-                            <%= frame.filename %>
-                        </summary>
-                        <blockquote class="code-quote -padded"><%= HTML.escape(frame.args).gsub("&#39;", '\'').gsub("&quot;", '"') %></blockquote>
-                    </details>
-                    <% else %>
-                    <div class="meta">
-                        <div class="frame-summary -short">
-                            <span class="app"><%= frame.label %></span>
-                            <%= frame.filename %>
+                      <%- if path -%>
+                          <span class="info"><%= File.basename(path) %></span>
+                      <%- end -%>
+                    </label>
+                    <div class="frame-info" role="stack-trace-details">
+                      <%- if context = frame.context -%>
+                          <div class="file">
+                              <a href="#"><%= frame.relative_path || frame.path %></a>
+                          </div>
+                        <pre class="code code-block">
+                          <%- context.to_h.each do |lineno, code| -%>
+                            <%- css_class = (lineno == frame.lineno) ? "-highlight" : nil -%>
+                            <span class="line <%= css_class %>"><span class="ln"><%= lineno %></span><span class="code"><%= HTML.escape(code).gsub("&#39;", '\'').gsub("&quot;", '"') %></span></span>
+                          <%- end -%>
+                        </pre>
+                          <details class="meta">
+                              <summary class="frame-summary" flow-id="code-frame-summary">
+                                  <span class="app"><%= label_for_frame(frame) %></span>
+                                  <%= HTML.escape(frame.method) %>
+                              </summary>
+                              <blockquote class="code-quote -padded"><%= HTML.escape(context.line.to_s.strip).gsub("&#39;", '\'').gsub("&quot;", '"') %></blockquote>
+                          </details>
+                      <%- else -%>
+                        <div class="file">
+                            <a href="#"><%= HTML.escape(frame.method) %></a>
                         </div>
+                        <div class="code code-block-empty">No code available.</div>
+                      <%- end -%>
                     </div>
-                    <% end %>
-                </div>
+                  </div>
                 <% end %>
-            </div>
-
-            <div class="stack-trace">
-                <div class="stack-trace-heading">
-                    <%= stack_trace_heading_html %>
-                    <label><input type="checkbox" role="show-all-toggle" flow-id="show-all-frames"> Show all frames</label>
-                </div>
-
-                <ul class="stack-trace-list" role="stack-trace-list">
-                    <% @frames.each do |frame| %>
-                    <li>
-                        <button flow-id="code-frame-file" class="stack-trace-item -<%= frame.context %>" role="stack-trace-item" data-index="<%= frame.index %>">
-                            <span class="left">
-                                <span class="app"><%= frame.label %></span>
-
-                                <span class="filename">
-                                    <%= frame.file %><% if frame.line %><span class="line">:<%= frame.line %></span><% end %>
-                                </span>
-                            </span>
-
-                            <span class="info"><%= frame.filename %></span>
-                        </button>
-                    </li>
-                    <% end %>
-                </ul>
             </div>
         </div>
         <% end %>
@@ -752,106 +795,12 @@ monospace_font = "menlo, consolas, monospace"
         <% end %>
     </div>
 
+    <% if custom_js = extra_javascript.presence %>
     <script>
     (function () {
-        var items = document.querySelectorAll('[role~="stack-trace-item"]');
-        var toggle = document.querySelector('[role~="show-all-toggle"]');
-
-        var list = document.querySelector('[role~="stack-trace-list"]');
-
-
-        each(items, function (item) {
-            on(item, 'click', itemOnclick);
-        })
-
-        on(toggle, 'click', toggleOnclick);
-
-        // Auto-check "show all" if there are no app frames.
-        if (document.querySelectorAll('[role~="stack-trace-list"] .-app').length === 0) {
-            toggle.checked = true;
-            toggleOnclick.call(toggle);
-        }
-
-        function toggleOnclick() {
-            if (this.checked) {
-                addClass(list, '-show-all');
-            } else {
-                removeClass(list, '-show-all');
-            }
-        }
-
-        function itemOnclick() {
-            var idx = this.getAttribute('data-index')
-
-            var detail = document.querySelector('[role~="stack-trace-details"].-active');
-            if (detail) {
-                removeClass(detail, '-active');
-            }
-
-            detail = document.querySelector('[role~="stack-trace-details"][data-index="' + idx + '"]')
-            if (detail) {
-                addClass(detail, '-active')
-            }
-
-            var item = document.querySelector('[role~="stack-trace-item"].-active')
-            if (item) {
-                removeClass(item, '-active')
-            }
-
-            item = document.querySelector('[role~="stack-trace-item"][data-index="' + idx + '"]')
-            if (item) {
-                addClass(item, '-active')
-            }
-        }
-
-        var first =
-            document.querySelector('[role~="stack-trace-item"].-app:first-of-type') ||
-            document.querySelector('[role~="stack-trace-item"]:first-of-type');
-
-        if (first) {
-            itemOnclick.call(first);
-        }
-
-        /*
-        * Helpers
-        */
-
-        function each(list, fn) {
-            for (var i = 0, len = list.length; i < len; i++) {
-                var item = list[i];
-                fn(item);
-            }
-        }
-
-        function addClass(el, className) {
-            if (el.classList) {
-                el.classList.add(className);
-            } else {
-                el.className += ' ' + className;
-            }
-        }
-
-        function removeClass(el, className) {
-            if (el.classList) {
-                el.classList.remove(className);
-            } else {
-                var expr = new RegExp('(^|\\b)' + className.split(' ').join('|') + '(\\b|$)', 'gi');
-                el.className = el.className.replace(expr, ' ');
-            }
-        }
-
-        function on(el, event, handler) {
-            if (el.addEventListener) {
-                el.addEventListener(event, handler);
-            } else {
-                el.attachEvent('on' + event, function () {
-                    handler.call(el);
-                });
-            }
-        }
-
-        <%= extra_javascript %>
+        <%= custom_js %>
     }());
     </script>
+    <% end %>
 </body>
 </html>

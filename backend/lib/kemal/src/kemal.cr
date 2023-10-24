@@ -7,18 +7,18 @@ require "./kemal/helpers/*"
 
 module Kemal
   # Overload of `self.run` with the default startup logging.
-  def self.run(port : Int32?, args = ARGV)
-    self.run(port, args) { }
+  def self.run(port : Int32?, args = ARGV, trap_signal : Bool = true)
+    self.run(port, args, trap_signal) { }
   end
 
   # Overload of `self.run` without port.
-  def self.run(args = ARGV)
-    self.run(nil, args: args)
+  def self.run(args = ARGV, trap_signal : Bool = true)
+    self.run(nil, args: args, trap_signal: trap_signal)
   end
 
   # Overload of `self.run` to allow just a block.
   def self.run(args = ARGV, &block)
-    self.run(nil, args: args, &block)
+    self.run(nil, args: args, trap_signal: true, &block)
   end
 
   # The command to run a `Kemal` application.
@@ -27,7 +27,7 @@ module Kemal
   #
   # To use custom command line arguments, set args to nil
   #
-  def self.run(port : Int32? = nil, args = ARGV, &block)
+  def self.run(port : Int32? = nil, args = ARGV, trap_signal : Bool = true, &)
     Kemal::CLI.new args
     config = Kemal.config
     config.setup
@@ -36,7 +36,7 @@ module Kemal
     # Test environment doesn't need to have signal trap and logging.
     if config.env != "test"
       setup_404
-      setup_trap_signal
+      setup_trap_signal if trap_signal
     end
 
     server = config.server ||= HTTP::Server.new(config.handlers)
@@ -66,12 +66,12 @@ module Kemal
   end
 
   def self.display_startup_message(config, server)
-    addresses = server.addresses.map { |address| "#{config.scheme}://#{address}" }.join ", "
-    log "[#{config.env}] Kemal is ready to lead at #{addresses}"
+    addresses = server.addresses.join ", " { |address| "#{config.scheme}://#{address}" }
+    log "[#{config.env}] #{config.app_name} is ready to lead at #{addresses}"
   end
 
   def self.stop
-    raise "Kemal is already stopped." if !config.running
+    raise "#{Kemal.config.app_name} is already stopped." if !config.running
     if server = config.server
       server.close unless server.closed?
       config.running = false
@@ -90,7 +90,7 @@ module Kemal
 
   private def self.setup_trap_signal
     Signal::INT.trap do
-      log "Kemal is going to take a rest!" if Kemal.config.shutdown_message
+      log "#{Kemal.config.app_name} is going to take a rest!" if Kemal.config.shutdown_message
       Kemal.stop
       exit
     end

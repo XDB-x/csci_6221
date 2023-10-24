@@ -10,6 +10,17 @@ describe "Kemal::RouteHandler" do
     client_response.body.should eq("hello")
   end
 
+  it "routes with long response body" do
+    long_response_body = "string" * 10_000
+
+    get "/" do
+      long_response_body
+    end
+    request = HTTP::Request.new("GET", "/")
+    client_response = call_request_on_app(request)
+    client_response.body.should eq(long_response_body)
+  end
+
   it "routes should only return strings" do
     get "/" do
       100
@@ -118,6 +129,54 @@ describe "Kemal::RouteHandler" do
     request = HTTP::Request.new("GET", "/")
     client_response = call_request_on_app(request)
     client_response.status_code.should eq(302)
+    client_response.body.should eq("")
+    client_response.headers.has_key?("Location").should eq(true)
+  end
+
+  it "redirects with body" do
+    get "/" do |env|
+      env.redirect "/login", body: "Redirecting to /login"
+    end
+    request = HTTP::Request.new("GET", "/")
+    client_response = call_request_on_app(request)
+    client_response.status_code.should eq(302)
+    client_response.body.should eq("Redirecting to /login")
+    client_response.headers.has_key?("Location").should eq(true)
+  end
+
+  it "redirects and closes response in before filter" do
+    filter_handler = Kemal::FilterHandler.new
+    filter_handler._add_route_filter("GET", "/", :before) do |env|
+      env.redirect "/login"
+    end
+    Kemal.config.add_filter_handler(filter_handler)
+
+    get "/" do
+      "home page"
+    end
+
+    request = HTTP::Request.new("GET", "/")
+    client_response = call_request_on_app(request)
+    client_response.status_code.should eq(302)
+    client_response.body.should eq("")
+    client_response.headers.has_key?("Location").should eq(true)
+  end
+
+  it "redirects in before filter without closing response" do
+    filter_handler = Kemal::FilterHandler.new
+    filter_handler._add_route_filter("GET", "/", :before) do |env|
+      env.redirect "/login", close: false
+    end
+    Kemal.config.add_filter_handler(filter_handler)
+
+    get "/" do
+      "home page"
+    end
+
+    request = HTTP::Request.new("GET", "/")
+    client_response = call_request_on_app(request)
+    client_response.status_code.should eq(302)
+    client_response.body.should eq("home page")
     client_response.headers.has_key?("Location").should eq(true)
   end
 end

@@ -2,16 +2,11 @@ name: web_chat
 version: 0.1.0
 
 dependencies:
+  pg:
+    github: will/crystal-pg
+  crypto:
+    github: crystal-lang/crystal
   kemal:
     github: kemalcr/kemal
-    version: 0.26.0
+  
 
-websocket:
-    github: HCLarsen/crystal-websocket
-    version: 0.1.0
-
-mongo:
-    github: datanoise/mongo.cr
-    
-crypto:
-    github: crystal-lang/crystal-crypto

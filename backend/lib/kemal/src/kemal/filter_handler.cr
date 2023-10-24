@@ -3,6 +3,7 @@ module Kemal
   class FilterHandler
     include HTTP::Handler
     INSTANCE = new
+    property tree
 
     # This middleware is lazily instantiated and added to the handlers as soon as a call to `after_X` or `before_X` is made.
     def initialize
@@ -71,7 +72,7 @@ module Kemal
     end
 
     private def radix_path(verb : String?, path : String, type : Symbol)
-      "#{type}/#{verb}/#{path}"
+      "/#{type}/#{verb}/#{path}"
     end
 
     # :nodoc:

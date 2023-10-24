@@ -1,6 +1,4 @@
-require "kilt"
-
-CONTENT_FOR_BLOCKS = Hash(String, Tuple(String, Proc(String))).new
+CONTENT_FOR_BLOCKS = Hash(String, Tuple(String, Proc(Nil))).new
 
 # `content_for` is a set of helpers that allows you to capture
 # blocks inside views to be rendered later during the request. The most
@@ -36,13 +34,7 @@ CONTENT_FOR_BLOCKS = Hash(String, Tuple(String, Proc(String))).new
 # layout, inside the <head> tag, and each view can call `content_for`
 # setting the appropriate set of tags that should be added to the layout.
 macro content_for(key, file = __FILE__)
-  %proc = ->() {
-    __kilt_io__ = IO::Memory.new
-    {{ yield }}
-    __kilt_io__.to_s
-  }
-
-  CONTENT_FOR_BLOCKS[{{key}}] = Tuple.new {{file}}, %proc
+  CONTENT_FOR_BLOCKS[{{key}}] = Tuple.new {{file}}, ->() { {{ yield }} }
   nil
 end
 
@@ -51,7 +43,14 @@ macro yield_content(key)
   if CONTENT_FOR_BLOCKS.has_key?({{key}})
     __caller_filename__ = CONTENT_FOR_BLOCKS[{{key}}][0]
     %proc = CONTENT_FOR_BLOCKS[{{key}}][1]
-    %proc.call if __content_filename__ == __caller_filename__
+
+    if __content_filename__ == __caller_filename__
+      %old_content_io, content_io = content_io, IO::Memory.new
+      %proc.call
+      %result = content_io.to_s
+      content_io = %old_content_io
+      %result
+    end
   end
 end
 
@@ -62,13 +61,17 @@ end
 # ```
 macro render(filename, layout)
   __content_filename__ = {{filename}}
-  content = render {{filename}}
-  render {{layout}}
+  content_io = IO::Memory.new
+  ECR.embed {{filename}}, content_io
+  content = content_io.to_s
+  layout_io = IO::Memory.new
+  ECR.embed {{layout}}, layout_io
+  layout_io.to_s
 end
 
 # Render view with the given filename.
 macro render(filename)
-  Kilt.render({{filename}})
+  ECR.render({{filename}})
 end
 
 # Halt execution with the current context.

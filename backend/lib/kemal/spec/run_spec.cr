@@ -5,14 +5,12 @@ private def run(code)
     require "./src/kemal"
     #{code}
     CR
-  String.build do |stdout|
-    stderr = String.build do |stderr|
-      Process.new("crystal", ["eval"], input: IO::Memory.new(code), output: stdout, error: stderr).wait
-    end
-    unless stderr.empty?
-      fail(stderr)
-    end
-  end
+
+  stdout = IO::Memory.new
+  stderr = IO::Memory.new
+  status = Process.new("crystal", ["eval"], input: IO::Memory.new(code), output: stdout, error: stderr).wait
+  fail(stderr.to_s) unless status.success?
+  stdout.to_s
 end
 
 describe "Run" do
