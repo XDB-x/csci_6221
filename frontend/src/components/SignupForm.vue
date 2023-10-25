@@ -39,7 +39,7 @@ export default {
         })
         .then(response => {
           if (response.data.status === 'success') {
-            this.$router.push('/login');
+            this.$router.push('/login'); 
           } else {
             this.errors.global = response.data.message;
           }

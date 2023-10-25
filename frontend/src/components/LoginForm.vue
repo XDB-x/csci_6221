@@ -3,7 +3,7 @@
     <img src="@/assets/Crystal_language_logo.png" alt="Crystal Language Logo" class="auth-logo">
     <h1 class="auth-title">WebChat</h1>
     <form @submit.prevent="login" class="auth-form">
-      <input v-model="username" placeholder="Username" required />
+      <input v-model="email" placeholder="Email" required type="email" />
       <p v-if="errors.username" class="error-text">{{ errors.username }}</p>
       <input v-model="password" placeholder="Password" type="password" required />
       <p v-if="errors.password" class="error-text">{{ errors.password }}</p>
@@ -19,7 +19,7 @@ import axios from 'axios';
 export default {
   data() {
     return {
-      username: '',
+      email: '',
       password: '',
       errors: {}
     };
@@ -29,12 +29,12 @@ export default {
       this.checkForErrors();
       if (!Object.keys(this.errors).length) {
         axios.post('http://localhost:3000/login', {
-          username: this.username,
+          email: this.email,  
           password: this.password
         })
         .then(response => {
           if (response.data.status === 'success') {
-            this.$router.push('/dashboard');
+            this.$router.push('/chat');  
           } else {
             this.errors.global = response.data.message;
           }
