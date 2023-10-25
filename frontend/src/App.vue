@@ -7,8 +7,7 @@
 
       </el-aside>
       <el-container direction="vertical">
-        <p>Welcome {{ username }}!</p>
-        <el-button @click="logout">Logout</el-button>
+
       </el-container>
     </el-main>
   </el-container>
