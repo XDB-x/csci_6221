@@ -12,6 +12,17 @@ end
 DB_URL = "postgres://xdb:crystal@localhost:5432/crystal"
 MY_DB = PG.connect(DB_URL)
 
+# Method to test database connection
+def test_query(db : PG::Connection)
+  begin
+    db.query("SELECT 1") do |rs|
+      puts "Connected" if rs.read(Int32?) == 1
+    end
+  rescue e : PG::Error
+    puts "Connection Failed: #{e.message}"
+  end
+end
+
 # Set up CORS headers
 before_get "/" do |env|
   env.response.headers["Access-Control-Allow-Origin"] = "*"
@@ -27,6 +38,12 @@ end
 
 # Handle OPTIONS method for /signup route
 options "/signup" do |env|
+  env.response.headers["Allow"] = "POST, OPTIONS"
+  env.response.content_type = "text/plain"
+  ""
+end
+# Handle OPTIONS method for /login route
+options "/login" do |env|
   env.response.headers["Allow"] = "POST, OPTIONS"
   env.response.content_type = "text/plain"
   ""

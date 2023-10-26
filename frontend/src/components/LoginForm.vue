@@ -4,7 +4,7 @@
     <h1 class="auth-title">WebChat</h1>
     <form @submit.prevent="login" class="auth-form">
       <input v-model="email" placeholder="Email" required type="email" />
-      <p v-if="errors.username" class="error-text">{{ errors.username }}</p>
+      <p v-if="errors.email" class="error-text">{{ errors.email }}</p>
       <input v-model="password" placeholder="Password" type="password" required />
       <p v-if="errors.password" class="error-text">{{ errors.password }}</p>
       <button>Log In</button>
@@ -46,7 +46,7 @@ export default {
     },
     checkForErrors() {
       this.errors = {}; // reset errors
-      if (!this.username) this.errors.username = "Username cannot be empty.";
+      if (!this.email) this.errors.email = "Email cannot be empty.";
       if (!this.password) this.errors.password = "Password cannot be empty.";
     }
   }
