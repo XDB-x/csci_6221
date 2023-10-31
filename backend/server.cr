@@ -1,4 +1,4 @@
-require "pg"
+#require "pg"
 require "json"
 require "openssl"
 require "kemal"
@@ -9,8 +9,8 @@ def to_hex(slice : Slice(UInt8)) : String
 end
 
 # Initialize PostgreSQL connection
-DB_URL = "postgres://xdb:crystal@localhost:5432/crystal"
-MY_DB = PG.connect(DB_URL)
+#DB_URL = "postgres://xdb:crystal@localhost:5432/crystal"
+#MY_DB = PG.connect(DB_URL)
 
 # Set up CORS headers
 before_get "/" do |env|

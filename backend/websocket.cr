@@ -13,7 +13,7 @@ class Client
     end 
 end
 
-Class Server 
+class Server 
     property Users = Array(Client).new
 
     def handle_connection(socket)
