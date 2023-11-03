@@ -9,7 +9,7 @@
       <div v-if="errors.email" class="error-message">{{ errors.email }}</div>
       <input v-model="password" placeholder="Password" required type="password" />
       <div v-if="errors.password" class="error-message">{{ errors.password }}</div>
-      <button :disabled="!isValid">Sign Up</button>
+      <button >Sign Up</button>
     </form>
   </div>
 </template>
@@ -31,11 +31,15 @@ export default {
     signup() {
       this.checkForErrors();
       if (!Object.keys(this.errors).length) {
-        axios.post('http://localhost:3000/signup', {
+        axios.post('http://localhost:3000/signup', JSON.stringify({
           firstName: this.firstName,
           lastName: this.lastName,
           email: this.email,
           password: this.password
+        }), {
+          headers: {
+            'Content-Type': 'application/json'
+          }
         })
         .then(response => {
           if (response.data.status === 'success') {
@@ -66,9 +70,7 @@ export default {
       const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
       return passwordRegex.test(this.password);
     },
-    isValid() {
-      return this.isEmailValid && this.isPasswordValid && this.firstName && this.lastName;
-    }
+  
   }
 }
 </script>

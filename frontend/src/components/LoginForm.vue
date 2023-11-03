@@ -28,9 +28,13 @@ export default {
     login() {
       this.checkForErrors();
       if (!Object.keys(this.errors).length) {
-        axios.post('http://localhost:3000/login', {
-          email: this.email,  
+        axios.post('http://localhost:3000/login', JSON.stringify({
+          email: this.email,
           password: this.password
+        }), {
+          headers: {
+            'Content-Type': 'application/json'
+          }
         })
         .then(response => {
           if (response.data.status === 'success') {
