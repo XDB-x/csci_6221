@@ -1,3 +1,11 @@
+struct UserSignUpParams
+  include JSON::Serializable
+  property first_name : String
+  property last_name : String
+  property email : String
+  property password : String
+end
+
 class UserController < ApplicationController
   getter user = User.new
 
@@ -23,14 +31,25 @@ class UserController < ApplicationController
   end
 
   def create
-    user = User.new user_params.validate!
+    user_data = UserSignUpParams.from_json(request.body.not_nil!)
+    user = User.new(
+      first_name: user_data.first_name,
+      last_name: user_data.last_name,
+      email: user_data.email,
+      password: user_data.password
+    )
     if user.save
-      redirect_to action: :index, flash: {"success" => "User has been created."}
+      respond_with do
+        json({"status" => "success"})
+      end
     else
-      flash[:danger] = "Could not create User!"
-      render "new.slang"
+      respond_with do
+        json({"status" => "error", "message" => "Could not create User!"})
+      end
     end
   end
+  
+  
 
   def update
     user.set_attributes user_params.validate!

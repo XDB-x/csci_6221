@@ -31,6 +31,9 @@ Amber::Server.configure do
     get "/", HomeController, :index
 
     resources "users", UserController
+    
+    post "/signup", UserController, :create
+
   end
 
   routes :api do
