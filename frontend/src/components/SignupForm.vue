@@ -3,76 +3,74 @@
     <img src="@/assets/Crystal_language_logo.png" alt="Crystal Language Logo" class="auth-logo">
     <h1 class="auth-title">WebChat</h1>
     <form @submit.prevent="signup" class="auth-form">
-      <input v-model="firstName" placeholder="First Name" required />
-      <input v-model="lastName" placeholder="Last Name" required />
+      <input v-model="username" placeholder="Username" required />
       <input v-model="email" placeholder="Email" required type="email" />
-      <div v-if="errors.email" class="error-message">{{ errors.email }}</div>
       <input v-model="password" placeholder="Password" required type="password" />
-      <div v-if="errors.password" class="error-message">{{ errors.password }}</div>
-      <button >Sign Up</button>
+      <button :disabled="!isValid">Sign Up</button>
     </form>
   </div>
 </template>
 
 <script>
-import axios from 'axios';
+import { ref, computed } from 'vue';
+import { useRouter } from 'vue-router';
 
 export default {
-  data() {
+  setup() {
+    const router = useRouter();
+    const username = ref('');
+    const email = ref('');
+    const password = ref('');
+
+    // Define and initialize user_list
+    const user_list = ref([]);
+
+    const isValid = computed(() => {
+      const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
+      return (
+        username.value && email.value &&
+        passwordRegex.test(password.value)
+      );
+    });
+
+    const signup = () => {
+      if (isValid.value) {
+        const usernameExists = user_list.value.some(user => user.username === username.value);
+    if (usernameExists) {
+      alert('The username already exists');
+    }
+      else{
+        const item = {};
+
+        item.username = username.value;
+        item.email = email.value;
+        item.password = password.value;
+
+        user_list.value.push(item);
+        alert('Register successfully');
+
+        router.push({
+          path: '/login',
+          query: {
+            list: JSON.stringify(user_list.value),
+    },
+  });
+
+      }
+
+      }
+    };
+
     return {
-      firstName: '',
-      lastName: '',
-      email: '',
-      password: '',
-      errors: {}
+      username,
+      email,
+      password,
+      isValid,
+      signup,
+      user_list,
     };
   },
-  methods: {
-    signup() {
-      this.checkForErrors();
-      if (!Object.keys(this.errors).length) {
-        axios.post('http://localhost:3000/signup', JSON.stringify({
-          firstName: this.firstName,
-          lastName: this.lastName,
-          email: this.email,
-          password: this.password
-        }), {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        })
-        .then(response => {
-          if (response.data.status === 'success') {
-            this.$router.push('/login'); 
-          } else {
-            this.errors.global = response.data.message;
-          }
-        })
-        .catch(error => {
-          console.error("There was an error!", error);
-        });
-      }
-    },
-    checkForErrors() {
-      this.errors = {}; // reset errors
-      if (!this.email) this.errors.email = "Email cannot be empty.";
-      else if (!this.isEmailValid) this.errors.email = "The email format must be correct.";
-      if (!this.password) this.errors.password = "Password cannot be empty.";
-      else if (!this.isPasswordValid) this.errors.password = "Password must be at least 8 characters. Include at least one uppercase letter, one lowercase letter, and number.";
-    }
-  },
-  computed: {
-    isEmailValid() {
-      const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-      return emailRegex.test(this.email);
-    },
-    isPasswordValid() {
-      const passwordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$/;
-      return passwordRegex.test(this.password);
-    },
-  
-  }
-}
+};
 </script>
 
 <style>
