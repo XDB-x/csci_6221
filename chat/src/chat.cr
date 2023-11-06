@@ -1,7 +1,14 @@
 require "kemal"
+require "sqlite3"
+require "db"
+
 
 logging false
 serve_static false
+
+
+# Database configuration
+DB_URL = "sqlite3:./db/users.db"
 
 SOCKETS = [] of HTTP::WebSocket
 
@@ -17,7 +24,11 @@ end
 post "/signup" do |env|
   username = env.params.body["username"]
   password = env.params.body["password"]
-  # ... handle signup ...
+
+  DB.open(DB_URL) do |db|
+    db.exec("INSERT INTO users (username, password) VALUES (?, ?)", username, password)
+  end
+  
   env.redirect "/login"
 end
 
@@ -28,8 +39,22 @@ end
 post "/login" do |env|
   username = env.params.body["username"]
   password = env.params.body["password"]
-  # ... handle login ...
-  env.redirect "/chat"
+  
+  user_exists = false
+  DB.open(DB_URL) do |db|
+    db.query("SELECT EXISTS(SELECT 1 FROM users WHERE username = ? AND password = ?)", username, password) do |rs|
+      if value = rs.read(Int32?) # Use Int32? to allow nil values
+        user_exists = value != nil && value > 0
+      end
+    end
+  end
+  
+  
+  if user_exists
+    env.redirect "/chat"
+  else
+    env.redirect "/chat"  # or redirect to a different page with an error message
+  end
 end
 
 ws "/chat" do |socket|

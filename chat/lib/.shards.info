@@ -11,5 +11,14 @@ shards:
     git: https://github.com/crystal-loot/exception_page.git
     version: 0.3.1
   kemal:
-    git: https://github.com/sdogruyol/kemal.git
+    git: https://github.com/kemalcr/kemal.git
     version: 1.4.0
+  db:
+    git: https://github.com/crystal-lang/crystal-db.git
+    version: 0.12.0
+  pg:
+    git: https://github.com/will/crystal-pg.git
+    version: 0.27.0
+  sqlite3:
+    git: https://github.com/crystal-lang/crystal-sqlite3.git
+    version: 0.20.0
