@@ -22,3 +22,6 @@ shards:
   sqlite3:
     git: https://github.com/crystal-lang/crystal-sqlite3.git
     version: 0.20.0
+  kemal-session:
+    git: https://github.com/kemalcr/kemal-session.git
+    version: 1.0.0

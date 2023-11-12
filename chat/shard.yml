@@ -6,10 +6,10 @@ dependencies:
     github: kemalcr/kemal
   sqlite3:
     github: crystal-lang/crystal-sqlite3
+  kemal-session:
+    github: kemalcr/kemal-session
 
 
 
-authors:
-  - sdogruyol <dogruyolserdar@gmail.com>
 
 license: MIT

@@ -1,7 +1,11 @@
 require "kemal"
 require "sqlite3"
 require "db"
+require "kemal-session"
 
+Kemal::Session.config do |config|
+  config.secret = "some_secret_key" # Use a secure random value here
+end
 
 logging false
 serve_static false
@@ -15,6 +19,7 @@ SOCKETS = [] of HTTP::WebSocket
 get "/chat" do
   render "views/index.ecr"
 end
+
 
 # Add these lines to your existing code
 get "/signup" do
@@ -51,8 +56,10 @@ post "/login" do |env|
   
   
   if user_exists
+    env.session.string("username", username)
     env.redirect "/chat"
   else
+    env.session.string("username", username)
     env.redirect "/chat"  # or redirect to a different page with an error message
   end
 end
