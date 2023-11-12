@@ -32,22 +32,19 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: backend  # Adjusted working-directory
+        working-directory: backend
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
       
-      - name: Set up Crystal repository
-        run: |
-          curl -fsSL https://dist.crystal-lang.org/apt/setup.sh | sudo bash
-      
       - name: Install Crystal
-        run: sudo apt-get install -y crystal
+        uses: crystal-lang/install-crystal@v1
+        with:
+          crystal_version: 1.0.0  # specify the version of Crystal
       
       - name: Install dependencies
         run: shards install
       
       - name: Build and Test
         run: crystal spec
-
 # Define your deployment steps below
