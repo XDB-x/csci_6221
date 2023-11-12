@@ -2,6 +2,40 @@
 <html>
   <head>
     <title>Kemal Chat</title>
+   <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; /* Viewport Height */
+        margin: 0;
+        font-family: Arial, sans-serif; /* Optional: improves font */
+      }
+
+      #container {
+        text-align: center; /* Center text for the form elements */
+      }
+
+      /* Optional: Additional styling for chat display and form */
+      #chat {
+        margin-bottom: 20px;
+        max-height: 300px; /* Adjust as needed */
+        overflow-y: auto; /* Enables scrolling for long chats */
+        width: 100%; /* Adjust width as needed */
+        border: 1px solid #ccc; /* Just for visual boundary */
+        padding: 10px;
+      }
+
+      form {
+        display: flex;
+        justify-content: center;
+        gap: 10px; /* Adds space between input and button */
+      }
+
+      input[type="submit"] {
+        cursor: pointer; /* Changes cursor on hover over button */
+      }
+    </style>
     <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
     <script>
       $(document).ready(function() {
@@ -24,10 +58,12 @@
     </script>
   </head>
   <body>
-    <pre id='chat'></pre>
-    <form>
-      <input id='msg' placeholder='message...' />
-      <input type="submit" value="Send">
-    </form>
+    <div id="container">
+      <pre id='chat'></pre>
+      <form>
+        <input id='msg' placeholder='message...' />
+        <input type="submit" value="Send">
+      </form>
+    </div>c
   </body>
 </html>
