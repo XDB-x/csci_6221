@@ -2,32 +2,108 @@
 <html>
   <head>
     <title>Kemal Chat</title>
+   <style>
+      body {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh; 
+        margin: 0;
+        font-family: Arial, sans-serif; 
+      }
+
+      #container {
+        text-align: center; 
+      }
+
+      
+      #chat {
+        margin-bottom: 20px;
+        max-height: 300px; 
+        overflow-y: auto; 
+        width: 100%; 
+        border: 1px solid #ccc; 
+        padding: 10px;
+      }
+
+      form {
+        display: flex;
+        justify-content: center;
+        gap: 10px; 
+      }
+
+      input[type="submit"] {
+        cursor: pointer; 
+      }
+    </style>
     <script src="https://code.jquery.com/jquery-1.11.3.js"></script>
-    <script>
+   <script>
       $(document).ready(function() {
-        // Open WebSocket connection
+        var username = prompt("Please enter your username", "guest");
+        var userColors = {}; // Object to store colors for different users
+        var firstJoin = true; // Flag for the first join message
+
+        function getRandomColor() {
+          return "#" + Math.floor(Math.random()*16777215).toString(16);
+        }
+
+        function processMessage(sender, message) {
+          if (!userColors[sender]) {
+            userColors[sender] = getRandomColor();
+          }
+          return '<span style="color: ' + userColors[sender] + ';">' + sender + '</span>' + message + '\n';
+        }
+
         var ws = new WebSocket("ws://" + location.host + "/chat");
-        // Append each message
-        ws.onmessage = function(e) { $('#chat').append(e.data + "\n") };
+
+        ws.onopen = function() {
+          ws.send(username + " has joined the room.");
+          if (firstJoin) {
+            $('#chat').append(processMessage(username, " has joined the room.\n"));
+            firstJoin = false;
+          }
+        };
+
+        ws.onmessage = function(e) {
+          var colonIndex = e.data.indexOf(":");
+          var joinIndex = e.data.indexOf("has joined the room");
+
+          if (colonIndex !== -1) {
+            // Regular chat message
+            var messageUser = e.data.substring(0, colonIndex);
+            var messageText = e.data.substring(colonIndex);
+            $('#chat').append(processMessage(messageUser, messageText));
+          } else if (joinIndex !== -1) {
+            // Join message
+            var messageUser = e.data.substring(0, joinIndex).trim();
+            if (messageUser !== username) {
+              $('#chat').append(processMessage(messageUser, " has joined the room.\n"));
+            }
+          }
+        };
 
         $("form").bind('submit', function(e) {
-          var message = $('#msg').val();
+          var message = username + ": " + $('#msg').val();
           ws.send(message);
-          $('#msg').val(''); $('#msg').focus();
+          $('#msg').val('');
+          $('#msg').focus();
           e.preventDefault();
         });
+
         window.onbeforeunload = function() {
-          websocket.onclose = function () {}; // disable onclose handler first
-          websocket.close()
+          websocket.onclose = function () {};
+          websocket.close();
         };
       });
     </script>
   </head>
   <body>
-    <pre id='chat'></pre>
-    <form>
-      <input id='msg' placeholder='message...' />
-      <input type="submit" value="Send">
-    </form>
+    <div id="container">
+      <pre id='chat'></pre>
+      <form>
+        <input id='msg' placeholder='message...' />
+        <input type="submit" value="Send">
+      </form>
+    </div>
   </body>
 </html>

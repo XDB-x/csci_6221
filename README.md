@@ -10,13 +10,11 @@ Short project description here.
   - [Table of Contents](#table-of-contents)
   - [Prerequisites](#prerequisites)
   - [Setup and Installation](#setup-and-installation)
-  - [Running Vue.js Files](#running-vuejs-files)
   - [Running Crystal Files](#running-crystal-files)
   - [GitHub Operation Specifications](#github-operation-specifications)
 
 ## Prerequisites
 
-- Ensure you have [Node.js](https://nodejs.org/) installed for running Vue.js files.
 - Ensure you have [Crystal](https://crystal-lang.org/install/) installed to run Crystal files.
 - Recommended Operating Systems: macOS, Linux, or Windows Subsystem for Linux (WSL).
 
@@ -30,21 +28,13 @@ cd csci_6221/backend && shards install
 crystal run server.cr
 ```
 
-## Running Vue.js Files
-
-```bash
-cd path-to-vue-directory
-npm install
-npm run serve
-Now, your Vue.js application should be running on http://localhost:8080.
-```
-
 ## Running Crystal Files
 
 ```bash
 cd path-to-crystal-directory
-crystal build your-file.cr
-./your-file
+cd chat
+crystal src/chat.cr
+
 ```
 
 ## GitHub Operation Specifications
@@ -53,4 +43,3 @@ Branches: It's recommended to create separate branches for different features or
 Pull Requests: Submit pull requests for code review before merging into the main branch.
 Issues: Use GitHub issues to track bugs, feature requests, and other types of issues.
 Actions: Utilize GitHub Actions for continuous integration and other automation.
-
