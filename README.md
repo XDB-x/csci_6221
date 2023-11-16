@@ -24,7 +24,8 @@ Clone the repository to your local machine:
 
 ```bash
 git clone https://github.com/XDB-x/csci_6221.git
-cd your-repository-name
+cd csci_6221/backend && shards install
+crystal run server.cr
 ```
 
 ## Running Crystal Files
@@ -42,5 +43,3 @@ Branches: It's recommended to create separate branches for different features or
 Pull Requests: Submit pull requests for code review before merging into the main branch.
 Issues: Use GitHub issues to track bugs, feature requests, and other types of issues.
 Actions: Utilize GitHub Actions for continuous integration and other automation.
-
-
