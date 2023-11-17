@@ -1,6 +1,6 @@
-# csci_6221
+# CSCI_6221
 
-Short project description here.
+Online Chat using Crystal programming language.
 
 
 ## Table of Contents
